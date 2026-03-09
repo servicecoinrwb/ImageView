@@ -1,0 +1,14 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /uploads/{filename} {
+      // Anyone can read (public image hosting)
+      allow read: if true;
+      // Anyone can upload images up to 10MB
+      allow write: if request.resource.size < 10 * 1024 * 1024
+                   && request.resource.contentType.matches('image/.*');
+      // Anyone can delete
+      allow delete: if true;
+    }
+  }
+}
